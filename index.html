@@ -20,37 +20,36 @@
     </script>
 
     <style>
-        body { background-color: #030303; color: #ffffff; overflow: hidden; font-family: 'Orbitron', sans-serif; cursor: none; }
+        /* MOBILE OVERRIDE: Allowed vertical scrolling, disabled custom cursor on touch devices */
+        body { background-color: #030303; color: #ffffff; font-family: 'Orbitron', sans-serif; overflow-x: hidden; }
+        @media (pointer: coarse) { #cursor, #cursor-dot { display: none !important; } body { cursor: auto; } }
+        @media (pointer: fine) { body { cursor: none; } }
         
-        /* CYBERNETIC GRID */
         .bg-grid {
             background-size: 40px 40px;
             background-image: linear-gradient(to right, rgba(255, 0, 127, 0.05) 1px, transparent 1px),
                               linear-gradient(to bottom, rgba(255, 0, 127, 0.05) 1px, transparent 1px);
             position: absolute; inset: 0; z-index: 0;
             animation: gridMove 20s linear infinite;
+            position: fixed; /* Keeps background still while scrolling on mobile */
         }
         @keyframes gridMove { 0% { transform: translateY(0); } 100% { transform: translateY(40px); } }
 
-        /* NEON FX & GLASSMORPHISM */
         .neon-glow { text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 40px #ff007f; }
         .glass-panel { background: rgba(10, 10, 12, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 0, 127, 0.15); box-shadow: inset 0 0 20px rgba(255, 0, 127, 0.05); }
         .panel-header { border-bottom: 1px solid rgba(255, 0, 127, 0.3); background: linear-gradient(90deg, rgba(255, 0, 127, 0.1) 0%, transparent 100%); }
 
-        /* CROSSHAIR CURSOR */
         #cursor { width: 40px; height: 40px; border: 1px solid rgba(255, 0, 127, 0.5); position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
         #cursor::before, #cursor::after { content: ''; position: absolute; background: #ff007f; }
         #cursor::before { top: 50%; left: -5px; right: -5px; height: 1px; transform: translateY(-50%); }
         #cursor::after { left: 50%; top: -5px; bottom: -5px; width: 1px; transform: translateX(-50%); }
         #cursor-dot { width: 4px; height: 4px; background: #fff; position: fixed; pointer-events: none; z-index: 9999; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 10px #fff; }
 
-        /* BOOT SEQUENCE */
         #splash { position: fixed; inset: 0; z-index: 5000; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .splash-fade { opacity: 0; visibility: hidden; transition: all 1.2s cubic-bezier(0.8, 0, 0.2, 1); transform: scale(1.05); }
-        .scanline { width: 100%; height: 100px; background: linear-gradient(0deg, transparent, rgba(255, 0, 127, 0.2), transparent); position: absolute; z-index: 50; animation: scan 6s linear infinite; pointer-events: none; opacity: 0.5; }
+        .scanline { width: 100%; height: 100px; background: linear-gradient(0deg, transparent, rgba(255, 0, 127, 0.2), transparent); position: fixed; z-index: 50; animation: scan 6s linear infinite; pointer-events: none; opacity: 0.5; }
         @keyframes scan { 0% { top: -100px; } 100% { top: 100vh; } }
 
-        /* SCROLLBAR & ACCORDION */
         ::-webkit-scrollbar { width: 4px; display: block; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
         ::-webkit-scrollbar-thumb { background: rgba(255, 0, 127, 0.5); border-radius: 2px; }
@@ -65,20 +64,21 @@
     <div id="cursor"></div>
     <div id="cursor-dot"></div>
     <div class="scanline"></div>
+    <div class="bg-grid"></div>
 
     <div id="splash">
-        <div class="font-mono text-[10px] text-neon mb-2 tracking-[0.5em] uppercase">Booting Sector Command...</div>
-        <div class="text-6xl font-black uppercase tracking-widest text-white mb-8 neon-glow">BOSS BABES</div>
-        <div class="w-96 h-[2px] bg-white/10 relative overflow-hidden">
+        <div class="font-mono text-[10px] text-neon mb-2 tracking-[0.5em] uppercase text-center">Booting Sector Command...</div>
+        <div class="text-4xl md:text-6xl font-black uppercase tracking-widest text-white mb-8 neon-glow text-center">BOSS BABES</div>
+        <div class="w-64 md:w-96 h-[2px] bg-white/10 relative overflow-hidden">
             <div id="boot-progress" class="absolute top-0 left-0 h-full bg-neon w-0 shadow-[0_0_15px_#ff007f] transition-all duration-[3s] ease-out"></div>
         </div>
-        <div id="boot-log" class="mt-6 font-mono text-[8px] text-gray-500 tracking-widest uppercase h-4">Initializing Neural Link...</div>
+        <div id="boot-log" class="mt-6 font-mono text-[8px] text-gray-500 tracking-widest uppercase h-4 text-center">Initializing Neural Link...</div>
     </div>
 
-    <div class="relative w-full h-screen flex flex-col p-4 bg-grid overflow-hidden">
+    <div class="relative w-full min-h-screen flex flex-col p-2 md:p-4 overflow-x-hidden">
         
-        <header class="w-full h-16 glass-panel flex justify-between items-center px-6 z-40 relative">
-            <div class="flex items-center gap-6">
+        <header class="w-full glass-panel flex flex-col md:flex-row justify-between items-center px-4 py-4 lg:h-16 z-40 relative gap-4 md:gap-0">
+            <div class="flex flex-col md:flex-row items-center gap-2 md:gap-6 w-full md:w-auto text-center md:text-left">
                 <div class="text-2xl font-black tracking-widest uppercase italic text-white">OMG.<span class="text-neon neon-glow">LEXIEEE</span></div>
                 
                 <div class="hidden lg:flex items-center gap-4 font-mono text-[9px] text-gray-500 tracking-widest uppercase border-l border-white/10 pl-6">
@@ -87,56 +87,28 @@
                 </div>
             </div>
             
-            <div class="flex items-center gap-8 font-mono text-[10px] tracking-widest uppercase text-gray-400">
+            <div class="flex items-center gap-4 md:gap-8 font-mono text-[10px] tracking-widest uppercase text-gray-400">
                 <div id="sys-clock" class="text-neon">00:00:00</div>
-                <div class="border-l border-white/20 pl-8">Network: <span class="text-white font-bold">SECURE</span></div>
+                <div class="border-l border-white/20 pl-4 md:pl-8">Net: <span class="text-white font-bold">SECURE</span></div>
             </div>
         </header>
 
-        <main class="flex-1 w-full flex gap-4 mt-4 z-40 relative h-[calc(100vh-6rem)]">
+        <main class="flex-1 w-full flex flex-col lg:flex-row gap-4 mt-4 z-40 relative h-auto lg:h-[calc(100vh-7rem)] pb-10 lg:pb-0">
             
-            <div class="w-1/4 flex flex-col gap-4 h-full">
-                <div class="glass-panel h-1/3 flex flex-col relative overflow-hidden group">
-                    <div class="panel-header px-4 py-2 font-mono text-[9px] text-neon tracking-widest uppercase">Sector Radar [Sector_36]</div>
-                    <div class="flex-1 relative flex items-center justify-center">
-                        <canvas id="radar" class="absolute inset-0 w-full h-full opacity-60 mix-blend-screen"></canvas>
-                        <div class="font-mono text-[10px] text-gray-500 tracking-widest uppercase z-10 bg-black/50 px-2 py-1 border border-white/10">Scanning...</div>
-                    </div>
-                </div>
-
-                <div class="glass-panel flex-1 flex flex-col">
-                    <div class="panel-header px-4 py-2 font-mono text-[9px] text-neon tracking-widest uppercase">Global Comms Uplink</div>
-                    <div class="p-6 flex flex-col gap-4 h-full justify-center">
-                        <a href="https://www.tiktok.com/@omg.lexieee" target="_blank" class="w-full py-4 bg-neon/10 border border-neon text-neon text-center font-black tracking-[0.2em] uppercase text-xs hover:bg-neon hover:text-white transition-all shadow-[inset_0_0_15px_rgba(255,0,127,0.2)] cursor-pointer">
-                            Launch TikTok Terminal
-                        </a>
-                        <a href="https://discord.gg/DUd86KZjjw" target="_blank" class="w-full py-4 bg-white/5 border border-white/20 text-white text-center font-black tracking-[0.2em] uppercase text-xs hover:border-neon hover:text-neon transition-all cursor-pointer">
-                            Enter Discord War Room
-                        </a>
-                        <div class="mt-auto pt-4 border-t border-white/10">
-                            <div class="font-mono text-[8px] text-gray-500 uppercase tracking-widest mb-2">Live Alert Ticker:</div>
-                            <marquee class="font-mono text-[10px] text-alert tracking-widest uppercase">BO7 META SHIFT DETECTED // NEW LOADOUTS UPDATED IN ARMORY // TOURNAMENT DROPS IMMINENT //</marquee>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-1 glass-panel flex flex-col relative overflow-hidden">
+            <div class="w-full lg:flex-1 glass-panel flex flex-col relative overflow-hidden order-1 lg:order-2 min-h-[50vh] lg:min-h-0">
                 <div class="panel-header px-4 py-2 flex justify-between items-center">
-                    <span class="font-mono text-[9px] text-neon tracking-widest uppercase">Primary Asset // Squad Roster</span>
-                    <span class="font-mono text-[9px] text-gray-500 uppercase">Status: Deployed</span>
+                    <span class="font-mono text-[8px] md:text-[9px] text-neon tracking-widest uppercase">Primary Asset // Roster</span>
+                    <span class="font-mono text-[8px] md:text-[9px] text-gray-500 uppercase">Status: Deployed</span>
                 </div>
-                <div class="flex-1 p-4 flex items-center justify-center relative group">
-                    <div class="absolute inset-0 bg-gradient-to-t from-neon/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="flex-1 p-2 md:p-4 flex items-center justify-center relative group">
                     <img src="OMG.LEXIEEE.png" alt="Boss Babes Squad" class="max-h-full max-w-full object-contain filter drop-shadow-[0_0_30px_rgba(255,0,127,0.3)] z-10 relative hover:scale-[1.02] transition-transform duration-700">
-                    <div class="absolute bottom-10 right-10 font-mono text-[8px] text-neon bg-black/80 px-3 py-2 border border-neon/30 z-20 backdrop-blur-md">
-                        ASSET_ID: BB-WZ-01<br>
-                        CLEARANCE: OMEGA
+                    <div class="absolute bottom-4 right-4 md:bottom-10 md:right-10 font-mono text-[7px] md:text-[8px] text-neon bg-black/80 px-3 py-2 border border-neon/30 z-20 backdrop-blur-md">
+                        ASSET_ID: BB-WZ-01<br>CLEARANCE: OMEGA
                     </div>
                 </div>
             </div>
 
-            <div class="w-1/4 flex flex-col gap-4 h-full">
+            <div class="w-full lg:w-1/4 flex flex-col gap-4 order-2 lg:order-3 h-[600px] lg:h-full">
                 <div class="glass-panel flex-1 flex flex-col overflow-hidden">
                     <div class="panel-header px-4 py-2 flex justify-between items-center bg-surface/90 backdrop-blur-md z-10">
                         <span class="font-mono text-[9px] text-neon tracking-widest uppercase">BO7 Verified Meta</span>
@@ -146,11 +118,11 @@
                     <div class="p-4 flex flex-col overflow-y-auto h-full pr-2">
                         <details class="border border-white/10 bg-white/5 mb-3 hover:border-neon transition-colors group cursor-pointer">
                             <summary class="flex justify-between items-center p-3">
-                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">XM4 <span class="font-mono text-[8px] text-gray-500 ml-1">AR</span></h4>
-                                <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">L-RANGE</span>
+                                <h4 class="font-black text-xs md:text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">XM4 <span class="font-mono text-[8px] text-gray-500 ml-1">AR</span></h4>
+                                <span class="font-mono text-[7px] md:text-[8px] bg-neon/20 text-neon px-1">L-RANGE</span>
                             </summary>
                             <div class="p-3 pt-0">
-                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Absolute beam at mid-to-long range. Minimal recoil, heavy damage.</p>
+                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Absolute beam at mid-to-long range.</p>
                                 <div class="font-mono text-[8px] text-gray-300 uppercase space-y-1">
                                     <div class="flex justify-between"><span>Muzzle:</span><span class="text-white font-bold">Agency Suppressor</span></div>
                                     <div class="flex justify-between"><span>Barrel:</span><span class="text-white font-bold">13.5" Task Force</span></div>
@@ -162,11 +134,11 @@
                         </details>
                         <details class="border border-white/10 bg-white/5 mb-3 hover:border-neon transition-colors group cursor-pointer">
                             <summary class="flex justify-between items-center p-3">
-                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">JACKAL PDW <span class="font-mono text-[8px] text-gray-500 ml-1">SMG</span></h4>
-                                <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">MOVEMENT</span>
+                                <h4 class="font-black text-xs md:text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">JACKAL PDW <span class="font-mono text-[8px] text-gray-500 ml-1">SMG</span></h4>
+                                <span class="font-mono text-[7px] md:text-[8px] bg-neon/20 text-neon px-1">MOVEMENT</span>
                             </summary>
                             <div class="p-3 pt-0">
-                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Close quarters monster. High strafe speed for aggressive clears.</p>
+                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Close quarters monster. High strafe speed.</p>
                                 <div class="font-mono text-[8px] text-gray-300 uppercase space-y-1">
                                     <div class="flex justify-between"><span>Muzzle:</span><span class="text-white font-bold">Compensator</span></div>
                                     <div class="flex justify-between"><span>Barrel:</span><span class="text-white font-bold">Reinforced Heavy</span></div>
@@ -178,11 +150,11 @@
                         </details>
                         <details class="border border-white/10 bg-white/5 mb-3 hover:border-neon transition-colors group cursor-pointer">
                             <summary class="flex justify-between items-center p-3">
-                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">LR 7.62 <span class="font-mono text-[8px] text-gray-500 ml-1">SNIPE</span></h4>
-                                <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">1-SHOT</span>
+                                <h4 class="font-black text-xs md:text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">LR 7.62 <span class="font-mono text-[8px] text-gray-500 ml-1">SNIPE</span></h4>
+                                <span class="font-mono text-[7px] md:text-[8px] bg-neon/20 text-neon px-1">1-SHOT</span>
                             </summary>
                             <div class="p-3 pt-0">
-                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Heavy hitting sniper. 1-Shot down capability with optimized ADS.</p>
+                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Heavy hitting sniper. 1-Shot down capability.</p>
                                 <div class="font-mono text-[8px] text-gray-300 uppercase space-y-1">
                                     <div class="flex justify-between"><span>Muzzle:</span><span class="text-white font-bold">Wrapped Suppressor</span></div>
                                     <div class="flex justify-between"><span>Barrel:</span><span class="text-white font-bold">Tiger Team</span></div>
@@ -194,11 +166,11 @@
                         </details>
                         <details class="border border-white/10 bg-white/5 mb-3 hover:border-neon transition-colors group cursor-pointer">
                             <summary class="flex justify-between items-center p-3">
-                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">TANTO .22 <span class="font-mono text-[8px] text-gray-500 ml-1">SMG</span></h4>
-                                <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">HYBRID</span>
+                                <h4 class="font-black text-xs md:text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">TANTO .22 <span class="font-mono text-[8px] text-gray-500 ml-1">SMG</span></h4>
+                                <span class="font-mono text-[7px] md:text-[8px] bg-neon/20 text-neon px-1">HYBRID</span>
                             </summary>
                             <div class="p-3 pt-0">
-                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Hard-hitting SMG that doubles as sniper support. Excellent TTK.</p>
+                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Hard-hitting SMG that doubles as sniper support.</p>
                                 <div class="font-mono text-[8px] text-gray-300 uppercase space-y-1">
                                     <div class="flex justify-between"><span>Muzzle:</span><span class="text-white font-bold">Sound Suppressor</span></div>
                                     <div class="flex justify-between"><span>Barrel:</span><span class="text-white font-bold">V-D-V Reinforced</span></div>
@@ -211,18 +183,42 @@
                     </div>
                 </div>
 
-                <div class="glass-panel h-[30%] flex flex-col relative overflow-hidden border-t-2 border-neon">
+                <div class="glass-panel lg:h-[30%] flex flex-col relative overflow-hidden border-t-2 border-neon py-4 lg:py-0">
                     <div class="panel-header px-4 py-2 font-mono text-[9px] text-neon tracking-widest uppercase flex justify-between">
                         <span>High-Stakes Vault</span>
                         <span class="text-white animate-pulse">LOCKED</span>
                     </div>
                     <div class="flex-1 flex flex-col items-center justify-center p-4 text-center bg-black/40">
-                        <div class="font-black uppercase tracking-widest text-sm mb-2 text-white">Next Operation</div>
-                        
-                        <div id="countdown" class="font-mono text-3xl font-black text-neon tracking-widest neon-glow">00:00:00:00</div>
-                        <div class="font-mono text-[7px] text-gray-500 uppercase tracking-widest mt-1 mb-4">DAY : HR : MIN : SEC</div>
-                        
-                        <a href="https://discord.gg/DUd86KZjjw" target="_blank" class="px-6 py-2 bg-neon/20 border border-neon text-[9px] font-mono text-white uppercase hover:bg-neon hover:text-white transition-all cursor-pointer">Request Clearance</a>
+                        <div class="font-black uppercase tracking-widest text-xs md:text-sm mb-2 text-white">Next Operation</div>
+                        <div id="countdown" class="font-mono text-2xl md:text-3xl font-black text-neon tracking-widest neon-glow">00:00:00:00</div>
+                        <div class="font-mono text-[6px] md:text-[7px] text-gray-500 uppercase tracking-widest mt-1 mb-4">DAY : HR : MIN : SEC</div>
+                        <a href="https://discord.gg/DUd86KZjjw" target="_blank" class="px-6 py-2 bg-neon/20 border border-neon text-[8px] md:text-[9px] font-mono text-white uppercase hover:bg-neon hover:text-white transition-all cursor-pointer">Request Clearance</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-1/4 flex flex-col gap-4 order-3 lg:order-1 h-[500px] lg:h-full">
+                <div class="glass-panel h-[200px] lg:h-1/3 flex flex-col relative overflow-hidden group">
+                    <div class="panel-header px-4 py-2 font-mono text-[9px] text-neon tracking-widest uppercase">Sector Radar [Sector_36]</div>
+                    <div class="flex-1 relative flex items-center justify-center">
+                        <canvas id="radar" class="absolute inset-0 w-full h-full opacity-60 mix-blend-screen"></canvas>
+                        <div class="font-mono text-[10px] text-gray-500 tracking-widest uppercase z-10 bg-black/50 px-2 py-1 border border-white/10">Scanning...</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel flex-1 flex flex-col">
+                    <div class="panel-header px-4 py-2 font-mono text-[9px] text-neon tracking-widest uppercase">Global Comms Uplink</div>
+                    <div class="p-4 md:p-6 flex flex-col gap-4 h-full justify-center">
+                        <a href="https://www.tiktok.com/@omg.lexieee" target="_blank" class="w-full py-4 bg-neon/10 border border-neon text-neon text-center font-black tracking-[0.2em] uppercase text-[10px] md:text-xs hover:bg-neon hover:text-white transition-all shadow-[inset_0_0_15px_rgba(255,0,127,0.2)] cursor-pointer">
+                            Launch TikTok Terminal
+                        </a>
+                        <a href="https://discord.gg/DUd86KZjjw" target="_blank" class="w-full py-4 bg-white/5 border border-white/20 text-white text-center font-black tracking-[0.2em] uppercase text-[10px] md:text-xs hover:border-neon hover:text-neon transition-all cursor-pointer">
+                            Enter Discord War Room
+                        </a>
+                        <div class="mt-auto pt-4 border-t border-white/10">
+                            <div class="font-mono text-[8px] text-gray-500 uppercase tracking-widest mb-2">Live Alert Ticker:</div>
+                            <marquee class="font-mono text-[9px] md:text-[10px] text-alert tracking-widest uppercase">BO7 META SHIFT DETECTED // NEW LOADOUTS UPDATED IN ARMORY // TOURNAMENT DROPS IMMINENT //</marquee>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -231,7 +227,7 @@
     </div>
 
     <script>
-        // CURSOR
+        // CURSOR (Disabled automatically by CSS on touch devices)
         const cursor = document.getElementById('cursor');
         const dot = document.getElementById('cursor-dot');
         document.addEventListener('mousemove', (e) => {
@@ -254,8 +250,8 @@
             let i = 0;
             const logInterval = setInterval(() => {
                 if (i < logs.length) { log.innerText = logs[i]; i++; } else { clearInterval(logInterval); }
-            }, 600);
-            setTimeout(() => { document.getElementById('splash').classList.add('splash-fade'); }, 3500);
+            }, 500);
+            setTimeout(() => { document.getElementById('splash').classList.add('splash-fade'); }, 3000);
         });
 
         // SYSTEM CLOCK
