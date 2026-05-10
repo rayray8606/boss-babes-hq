@@ -1,24 +1,17 @@
-name: BossBot Command Center
+name: LexOS Deployment Alert
+
 on:
-  repository_dispatch:
-    types: [discord_command]
+  push:
+    branches:
+      - main
 
 jobs:
-  update-site:
+  notify-discord:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Update Website Intel
-        run: |
-          # Logic to swap the date in index.html based on Discord input
-          sed -i "s/new Date(\".*\")/new Date(\"${{ github.event.client_payload.new_date }}\")/g" index.html
-          
-      - name: Commit & Push Changes
-        run: |
-          git config --global user.name "BossBot-HQ"
-          git config --global user.email "bot@bossbabes.com"
-          git add index.html
-          git commit -m "Automated Intel Update from Discord HQ"
-          git push
+      - name: Send Tactical Alert to War Room
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "👑 **COMMANDER OMG.LEXIEEE:** Roberts Ent. has successfully updated the LexOS Global Headquarters. The newest meta data and tactical UI are now live on the global network."
