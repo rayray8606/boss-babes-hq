@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOSS BABES | Global Operations HQ</title>
+    <title>BOSS BABES WARZONE | Global Operations HQ</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono&display=swap" rel="stylesheet">
@@ -14,38 +14,32 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Orbitron', 'sans-serif'], mono: ['Space Mono', 'monospace'] },
-                    colors: { neon: '#ff007f', void: '#050505', surface: '#0d0d0f' }
+                    colors: { neon: '#ff007f', void: '#050505', surface: '#0d0d0f', alert: '#ff3333' }
                 }
             }
         }
     </script>
+
     <style>
         body { background-color: #050505; color: #ffffff; cursor: none; overflow-x: hidden; }
         .neon-text { text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f; }
-        .glass-panel { background: rgba(13, 13, 15, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 0, 127, 0.3); }
+        .glass-panel { background: rgba(13, 13, 15, 0.8); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.05); }
         
-        /* WORLD CLASS CURSOR */
-        #cursor { width: 30px; height: 30px; border: 1px solid #ff007f; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease-out; border-radius: 2px; transform: rotate(45deg); }
+        /* TICKER ANIMATION */
+        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(255, 51, 51, 0.1); border-bottom: 1px solid #ff3333; }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; font-family: 'Space Mono'; font-size: 10px; color: #ff3333; padding: 8px 0; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        /* TACTICAL CURSOR */
+        #cursor { width: 30px; height: 30px; border: 1px solid #ff007f; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease-out; transform: rotate(45deg); }
         #cursor-dot { width: 4px; height: 4px; background: #ff007f; position: fixed; pointer-events: none; z-index: 9999; border-radius: 50%; }
 
-        /* TACTICAL OVERRIDE SPLASH */
-        #splash { position: fixed; inset: 0; z-index: 1000; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .splash-exit { opacity: 0; visibility: hidden; transition: all 1s ease-in-out; }
-        
-        .matrix-text { font-family: 'Space Mono'; font-size: 10px; color: #ff007f; letter-spacing: 2px; }
-        
-        .scanline { position: absolute; width: 100%; height: 2px; background: rgba(255, 0, 127, 0.1); animation: scan 4s linear infinite; }
-        @keyframes scan { from { top: 0; } to { top: 100%; } }
+        /* SPLASH SEQUENCE */
+        #splash { position: fixed; inset: 0; z-index: 1000; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 1s ease-in-out; }
+        .splash-exit { opacity: 0; visibility: hidden; transform: scale(1.1); }
 
-        .glitch { animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite; }
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
+        .input-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 0, 127, 0.2); padding: 15px; color: white; font-family: 'Space Mono'; font-size: 11px; width: 100%; }
+        .input-box:focus { border-color: #ff007f; outline: none; background: rgba(255, 0, 127, 0.05); }
     </style>
 </head>
 <body class="antialiased">
@@ -53,96 +47,109 @@
     <div id="cursor"></div>
     <div id="cursor-dot"></div>
 
+    <div class="ticker-wrap fixed top-0 w-full z-[110]">
+        <div class="ticker uppercase tracking-[0.4em]">
+            [LIVE_UPDATE] REBIRTH SECTOR ROTATION ACTIVE // META SHIFT DETECTED // ROBERTS ENT. SATELLITE LINK STABLE // WEAPON BALANCING INITIATED //
+        </div>
+    </div>
+
     <div id="splash">
-        <div class="scanline"></div>
-        <div class="glitch text-neon text-4xl font-black mb-4">UPLINKING...</div>
-        <div class="matrix-text mb-8" id="status-log">INITIALIZING NEURAL LINK_</div>
+        <div class="text-neon text-2xl font-black mb-4 animate-pulse neon-text">UPLINKING TO COMMAND CENTER...</div>
         <div class="w-64 h-1 bg-white/10 rounded-full overflow-hidden">
             <div id="progress" class="h-full bg-neon w-0 transition-all duration-[4s]"></div>
         </div>
-        <div class="absolute bottom-10 font-mono text-[8px] text-gray-700 tracking-[1em]">ROBERTS ENTERPRISE SECURE CORE</div>
+        <div class="mt-4 font-mono text-[8px] text-gray-600 tracking-[1em]">ROBERTS ENTERPRISE SECURE CORE</div>
     </div>
 
-    <nav class="fixed w-full z-[100] glass-panel px-8 py-5 flex justify-between items-center">
-        <div class="text-xl font-black tracking-[0.3em] uppercase italic">
-            BOSS<span class="text-neon neon-text">BABES</span>
+    <nav class="fixed w-full z-[100] glass-panel px-8 py-5 mt-8 flex justify-between items-center">
+        <div class="text-xl font-black tracking-[0.3em] uppercase italic">BOSS<span class="text-neon neon-text">BABES</span></div>
+        
+        <div id="live-beacon" class="flex items-center gap-2 px-3 py-1 bg-red-600/20 border border-red-600 rounded-full">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+            </span>
+            <span class="font-mono text-[8px] text-red-500 font-black tracking-tighter uppercase">Live_Intel_Inbound</span>
         </div>
-        <div class="flex items-center gap-8">
-            <div class="hidden md:flex gap-6 font-mono text-[10px] tracking-widest text-gray-400">
-                <span class="hover:text-neon cursor-pointer transition-colors">STRAT_MAP</span>
-                <span class="hover:text-neon cursor-pointer transition-colors">SQUAD_INTEL</span>
-            </div>
-            <a href="https://www.tiktok.com/@omg.lexieee" target="_blank" class="px-5 py-2 bg-neon/10 border border-neon text-neon text-[10px] font-bold tracking-widest uppercase hover:bg-neon hover:text-white transition-all">
-                SIGNAL_LIVE
-            </a>
+
+        <div class="hidden md:flex gap-6 font-mono text-[9px] tracking-widest text-gray-400 uppercase">
+            <a href="#armory" class="hover:text-neon transition-all">Armory</a>
+            <a href="#join" class="hover:text-neon transition-all">Join_Squad</a>
         </div>
     </nav>
 
-    <main class="relative min-h-screen flex flex-col items-center justify-center pt-20 px-6">
+    <main class="relative min-h-screen flex flex-col items-center justify-center pt-24 px-6">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neon/5 via-void to-void"></div>
-        
         <div class="relative z-10 text-center" data-aos="zoom-in">
-            <div class="font-mono text-[10px] text-neon tracking-[0.8em] mb-6 uppercase">Sector: Rebirth Island // Mode: Elite</div>
-            <h1 class="text-6xl md:text-[11rem] font-black leading-none uppercase tracking-tighter mb-10">
-           <h1 class="text-6xl md:text-[9rem] font-black leading-none uppercase tracking-tighter mb-10">
-    <span class="block text-white">BOSS BABES</span>
-    <span class="text-neon italic neon-text text-7xl md:text-[11rem]">WARZONE</span>
-</h1>
-            <div class="flex flex-col md:flex-row gap-6 justify-center mt-12">
-                <a href="https://www.tiktok.com/@omg.lexieee" target="_blank" class="w-72 py-5 bg-neon text-white font-black tracking-[0.3em] uppercase text-xs hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,0,127,0.3)]">Establish Feed</a>
-                <a href="https://discord.gg/DUd86KZjjw" target="_blank" class="w-72 py-5 border border-white/10 glass-panel text-white font-black tracking-[0.3em] uppercase text-xs hover:border-neon transition-all">Command Center</a>
+            <div class="font-mono text-[10px] text-neon tracking-[0.8em] mb-6 uppercase">Provider: Roberts Ent.</div>
+            <h1 class="text-6xl md:text-[9rem] font-black leading-none uppercase tracking-tighter mb-10">
+                <span class="block text-white">BOSS BABES</span>
+                <span class="text-neon italic neon-text text-7xl md:text-[11rem]">WARZONE</span>
+            </h1>
+            <div class="flex flex-col md:flex-row gap-6 justify-center">
+                <a href="https://www.tiktok.com/@omg.lexieee" target="_blank" class="w-72 py-5 bg-neon text-white font-black tracking-[0.3em] uppercase text-xs shadow-[0_0_30px_rgba(255,0,127,0.3)]">Establish Feed</a>
             </div>
         </div>
     </main>
 
-    <section class="py-32 bg-void relative">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="flex flex-col items-center mb-20">
-                <h2 class="text-3xl font-black uppercase tracking-[0.5em] mb-4">The Roster</h2>
-                <div class="h-[2px] w-40 bg-gradient-to-r from-transparent via-neon to-transparent"></div>
+    <section id="armory" class="py-32 bg-void px-6 border-y border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-end mb-12">
+                <h2 class="text-3xl font-black uppercase tracking-widest italic">Verified <span class="text-neon">Meta</span></h2>
+                <span class="font-mono text-[8px] text-gray-600 mb-2 uppercase">Sync: 12H Intervals // Roberts Ent. Scrape</span>
             </div>
-            
-            <div class="relative p-1 bg-gradient-to-b from-neon/40 to-transparent rounded-sm" data-aos="fade-up">
-                <img src="OMG.LEXIEEE.png" alt="Roster" class="w-full grayscale hover:grayscale-0 transition-all duration-700">
-                <div class="absolute top-4 right-4 font-mono text-[8px] text-neon bg-black/80 px-2 py-1">AUTH_VERIFIED</div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="glass-panel p-8 armory-card border-l-2 border-neon" data-aos="fade-right">
+                    <h3 class="text-2xl font-black uppercase mb-6">SVA 545 <span class="text-[10px] font-mono text-gray-500 block">Pro_Build_Ref: 442</span></h3>
+                    <ul class="space-y-4 font-mono text-[11px] text-gray-300 uppercase tracking-widest">
+                        <li class="flex justify-between border-b border-white/5 pb-2"><span>Muzzle</span> <span class="text-neon">Komodo Heavy</span></li>
+                        <li class="flex justify-between border-b border-white/5 pb-2"><span>Barrel</span> <span class="text-neon">STV Precision</span></li>
+                        <li class="flex justify-between border-b border-white/5 pb-2"><span>Optic</span> <span class="text-neon">Corio Enforcer</span></li>
+                        <li class="flex justify-between"><span>Magazine</span> <span class="text-neon">60 Round Mag</span></li>
+                    </ul>
+                </div>
+                <div class="glass-panel p-8 armory-card border-l-2 border-white/10 opacity-60" data-aos="fade-left">
+                    <h3 class="text-2xl font-black uppercase mb-6">HRM-9 <span class="text-[10px] font-mono text-gray-500 block">Pro_Build_Ref: 091</span></h3>
+                    <ul class="space-y-4 font-mono text-[11px] text-gray-300 uppercase tracking-widest">
+                        <li class="flex justify-between border-b border-white/5 pb-2"><span>Muzzle</span> <span class="text-white">Zehmn35 Comp</span></li>
+                        <li class="flex justify-between"><span>Stock</span> <span class="text-white">Folding Stock</span></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-20 border-t border-white/5 text-center">
-        <div class="font-mono text-[9px] text-gray-500 tracking-[1em] uppercase mb-4">
-            Encrypted & Powered by Roberts Enterprise
+    <section id="join" class="py-32 bg-surface px-6">
+        <div class="max-w-xl mx-auto glass-panel p-10 border-t-2 border-neon">
+            <h2 class="text-3xl font-black uppercase text-center mb-4 tracking-widest italic">Join <span class="text-neon">Squad</span></h2>
+            <p class="font-mono text-[9px] text-center text-gray-500 uppercase tracking-[0.4em] mb-12 italic">Intel Submitted Directly to Boss Command</p>
+            <form class="space-y-6">
+                <input type="text" placeholder="ACTIVISION_ID" class="input-box">
+                <input type="email" placeholder="EMAIL_ENCRYPTED" class="input-box">
+                <textarea placeholder="SKILL_REPORT (KD / ROLE / WINS)" class="input-box h-32"></textarea>
+                <button class="w-full py-5 bg-neon text-white font-black uppercase text-xs tracking-[0.3em] hover:bg-white hover:text-neon transition-all">Submit_For_Review</button>
+            </form>
         </div>
-        <div class="text-[8px] text-gray-700 font-mono italic uppercase">
-            System V.1.0.4 // No Exceptions // All Rights Reserved &copy; 2026
-        </div>
+    </section>
+
+    <footer class="py-20 text-center border-t border-white/5">
+        <div class="font-mono text-[9px] text-gray-500 tracking-[1em] uppercase mb-4">Secured & Powered by Roberts Enterprise</div>
+        <div class="text-[8px] text-gray-700 font-mono tracking-widest uppercase">Global Operations // All Intel Verified // &copy; 2026</div>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
         
-        // ELITE SPLASH SEQUENCE
+        // BOOT SEQUENCE
         window.addEventListener('load', () => {
-            const progress = document.getElementById('progress');
-            const log = document.getElementById('status-log');
-            const messages = ["DECRYPTING SECTOR...", "ESTABLISHING SATELLITE LINK...", "AUTHORIZING ROBERTS_ENT...", "READY."];
-            
-            progress.style.width = '100%';
-            
-            let i = 0;
-            const interval = setInterval(() => {
-                log.innerText = messages[i];
-                i++;
-                if(i === messages.length) clearInterval(interval);
-            }, 1000);
-
-            setTimeout(() => {
-                document.getElementById('splash').classList.add('splash-exit');
-            }, 5000);
+            document.getElementById('progress').style.width = '100%';
+            setTimeout(() => { 
+                document.getElementById('splash').classList.add('splash-exit'); 
+            }, 4500);
         });
 
-        // PRECISION CURSOR
+        // PRECISION TACTICAL CURSOR
         const cursor = document.getElementById('cursor');
         const dot = document.getElementById('cursor-dot');
         document.addEventListener('mousemove', (e) => {
