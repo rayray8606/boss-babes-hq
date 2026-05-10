@@ -52,8 +52,16 @@
         .scanline { width: 100%; height: 100px; background: linear-gradient(0deg, transparent, rgba(255, 0, 127, 0.2), transparent); position: absolute; z-index: 50; animation: scan 6s linear infinite; pointer-events: none; opacity: 0.5; }
         @keyframes scan { 0% { top: -100px; } 100% { top: 100vh; } }
 
-        /* SCROLLBAR HIDE */
-        ::-webkit-scrollbar { display: none; }
+        /* TACTICAL SCROLLBAR FOR META DB */
+        ::-webkit-scrollbar { width: 4px; display: block; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 0, 127, 0.5); border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff007f; }
+
+        /* HIDE DEFAULT DETAILS ARROW */
+        details > summary { list-style: none; outline: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary { border-bottom: 1px solid rgba(255,0,127,0.3); margin-bottom: 8px; padding-bottom: 8px; }
     </style>
 </head>
 <body class="antialiased selection:bg-neon selection:text-white">
@@ -63,8 +71,8 @@
     <div class="scanline"></div>
 
     <div id="splash">
-        <div class="font-mono text-[10px] text-neon mb-2 tracking-[0.5em] uppercase">Booting LexOS Kernel v3.6...</div>
-        <div class="text-4xl font-black uppercase tracking-widest text-white mb-8 neon-glow glitch-fx">ROBERTS ENTERPRISE</div>
+        <div class="font-mono text-[10px] text-neon mb-2 tracking-[0.5em] uppercase">Booting Sector Command...</div>
+        <div class="text-6xl font-black uppercase tracking-widest text-white mb-8 neon-glow">BOSS BABES</div>
         <div class="w-96 h-[2px] bg-white/10 relative overflow-hidden">
             <div id="boot-progress" class="absolute top-0 left-0 h-full bg-neon w-0 shadow-[0_0_15px_#ff007f] transition-all duration-[3s] ease-out"></div>
         </div>
@@ -84,7 +92,7 @@
             
             <div class="flex items-center gap-8 font-mono text-[10px] tracking-widest uppercase text-gray-400">
                 <div id="sys-clock" class="text-neon">00:00:00</div>
-                <div class="border-l border-white/20 pl-8">Secured By <span class="text-white font-bold">Roberts Ent.</span></div>
+                <div class="border-l border-white/20 pl-8">Network: <span class="text-white font-bold">SECURE</span></div>
             </div>
         </header>
 
@@ -102,15 +110,15 @@
                 <div class="glass-panel flex-1 flex flex-col">
                     <div class="panel-header px-4 py-2 font-mono text-[9px] text-neon tracking-widest uppercase">Global Comms Uplink</div>
                     <div class="p-6 flex flex-col gap-4 h-full justify-center">
-                        <a href="https://www.tiktok.com/@omg.lexieee" target="_blank" class="w-full py-4 bg-neon/10 border border-neon text-neon text-center font-black tracking-[0.2em] uppercase text-xs hover:bg-neon hover:text-white transition-all shadow-[inset_0_0_15px_rgba(255,0,127,0.2)]">
+                        <a href="https://www.tiktok.com/@omg.lexieee" target="_blank" class="w-full py-4 bg-neon/10 border border-neon text-neon text-center font-black tracking-[0.2em] uppercase text-xs hover:bg-neon hover:text-white transition-all shadow-[inset_0_0_15px_rgba(255,0,127,0.2)] cursor-pointer">
                             Launch TikTok Terminal
                         </a>
-                        <a href="https://discord.gg/DUd86KZjjw" target="_blank" class="w-full py-4 bg-white/5 border border-white/20 text-white text-center font-black tracking-[0.2em] uppercase text-xs hover:border-neon hover:text-neon transition-all">
+                        <a href="https://discord.gg/DUd86KZjjw" target="_blank" class="w-full py-4 bg-white/5 border border-white/20 text-white text-center font-black tracking-[0.2em] uppercase text-xs hover:border-neon hover:text-neon transition-all cursor-pointer">
                             Enter Discord War Room
                         </a>
                         <div class="mt-auto pt-4 border-t border-white/10">
                             <div class="font-mono text-[8px] text-gray-500 uppercase tracking-widest mb-2">Live Alert Ticker:</div>
-                            <marquee class="font-mono text-[10px] text-alert tracking-widest uppercase">META SHIFT DETECTED IN SECTOR 4 // NEW LOADOUTS PENDING // TOURNAMENT DROPS IMMINENT //</marquee>
+                            <marquee class="font-mono text-[10px] text-alert tracking-widest uppercase">BO7 META SHIFT DETECTED // NEW LOADOUTS UPDATED IN ARMORY // TOURNAMENT DROPS IMMINENT //</marquee>
                         </div>
                     </div>
                 </div>
@@ -133,36 +141,99 @@
             </div>
 
             <div class="w-1/4 flex flex-col gap-4 h-full">
-                <div class="glass-panel flex-1 flex flex-col overflow-y-auto">
-                    <div class="panel-header px-4 py-2 flex justify-between items-center sticky top-0 bg-surface/90 backdrop-blur-md z-10">
-                        <span class="font-mono text-[9px] text-neon tracking-widest uppercase">Verified Meta DB</span>
+                <div class="glass-panel flex-1 flex flex-col overflow-hidden">
+                    <div class="panel-header px-4 py-2 flex justify-between items-center bg-surface/90 backdrop-blur-md z-10">
+                        <span class="font-mono text-[9px] text-neon tracking-widest uppercase">BO7 Verified Meta</span>
                         <div class="w-1 h-1 bg-green-500 rounded-full animate-ping"></div>
                     </div>
-                    <div class="p-4 flex flex-col gap-4">
-                        <div class="border border-white/10 bg-white/5 p-3 hover:border-neon transition-colors cursor-pointer group">
-                            <div class="flex justify-between items-center mb-2">
-                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">SVA 545</h4>
+                    
+                    <div class="p-4 flex flex-col overflow-y-auto h-full pr-2">
+                        
+                        <details class="border border-white/10 bg-white/5 mb-3 hover:border-neon transition-colors group cursor-pointer">
+                            <summary class="flex justify-between items-center p-3">
+                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">XM4 <span class="font-mono text-[8px] text-gray-500 ml-1">AR</span></h4>
                                 <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">L-RANGE</span>
+                            </summary>
+                            <div class="p-3 pt-0">
+                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Absolute beam at mid-to-long range. Minimal recoil, heavy damage output.</p>
+                                <div class="font-mono text-[8px] text-gray-300 uppercase space-y-1">
+                                    <div class="flex justify-between"><span>Muzzle:</span><span class="text-white font-bold">Agency Suppressor</span></div>
+                                    <div class="flex justify-between"><span>Barrel:</span><span class="text-white font-bold">13.5" Task Force</span></div>
+                                    <div class="flex justify-between"><span>Optic:</span><span class="text-white font-bold">Microflex LED</span></div>
+                                    <div class="flex justify-between"><span>Under:</span><span class="text-white font-bold">Field Agent Grip</span></div>
+                                    <div class="flex justify-between"><span>Mag:</span><span class="text-white font-bold">60 Rnd</span></div>
+                                </div>
                             </div>
-                            <div class="font-mono text-[8px] text-gray-400 uppercase space-y-1">
-                                <div class="flex justify-between"><span>Muzzle:</span><span class="text-white">Komodo Heavy</span></div>
-                                <div class="flex justify-between"><span>Barrel:</span><span class="text-white">STV Precision</span></div>
-                                <div class="flex justify-between"><span>Optic:</span><span class="text-white">Corio Enforcer</span></div>
-                                <div class="flex justify-between"><span>Mag:</span><span class="text-white">60 Rnd</span></div>
+                        </details>
+
+                        <details class="border border-white/10 bg-white/5 mb-3 hover:border-neon transition-colors group cursor-pointer">
+                            <summary class="flex justify-between items-center p-3">
+                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">JACKAL PDW <span class="font-mono text-[8px] text-gray-500 ml-1">SMG</span></h4>
+                                <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">MOVEMENT</span>
+                            </summary>
+                            <div class="p-3 pt-0">
+                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Close quarters monster. High strafe speed for aggressive building clears.</p>
+                                <div class="font-mono text-[8px] text-gray-300 uppercase space-y-1">
+                                    <div class="flex justify-between"><span>Muzzle:</span><span class="text-white font-bold">Compensator</span></div>
+                                    <div class="flex justify-between"><span>Barrel:</span><span class="text-white font-bold">Reinforced Heavy</span></div>
+                                    <div class="flex justify-between"><span>Stock:</span><span class="text-white font-bold">Raider Stock</span></div>
+                                    <div class="flex justify-between"><span>Grip:</span><span class="text-white font-bold">Serpent Wrap</span></div>
+                                    <div class="flex justify-between"><span>Mag:</span><span class="text-white font-bold">50 Rnd Drum</span></div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="border border-white/10 bg-white/5 p-3 hover:border-neon transition-colors cursor-pointer group">
-                            <div class="flex justify-between items-center mb-2">
-                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">HRM-9</h4>
-                                <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">CQC</span>
+                        </details>
+
+                        <details class="border border-white/10 bg-white/5 mb-3 hover:border-neon transition-colors group cursor-pointer">
+                            <summary class="flex justify-between items-center p-3">
+                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">LR 7.62 <span class="font-mono text-[8px] text-gray-500 ml-1">SNIPE</span></h4>
+                                <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">ONE-SHOT</span>
+                            </summary>
+                            <div class="p-3 pt-0">
+                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Heavy hitting sniper. 1-Shot down capability with optimized ADS speed.</p>
+                                <div class="font-mono text-[8px] text-gray-300 uppercase space-y-1">
+                                    <div class="flex justify-between"><span>Muzzle:</span><span class="text-white font-bold">Wrapped Suppressor</span></div>
+                                    <div class="flex justify-between"><span>Barrel:</span><span class="text-white font-bold">Tiger Team</span></div>
+                                    <div class="flex justify-between"><span>Laser:</span><span class="text-white font-bold">SWAT 5mw</span></div>
+                                    <div class="flex justify-between"><span>Stock:</span><span class="text-white font-bold">Combat Stock</span></div>
+                                    <div class="flex justify-between"><span>Mag:</span><span class="text-white font-bold">7 Rnd Speed</span></div>
+                                </div>
                             </div>
-                            <div class="font-mono text-[8px] text-gray-400 uppercase space-y-1">
-                                <div class="flex justify-between"><span>Muzzle:</span><span class="text-white">Zehmn35</span></div>
-                                <div class="flex justify-between"><span>Under:</span><span class="text-white">DR-6 Handstop</span></div>
-                                <div class="flex justify-between"><span>Stock:</span><span class="text-white">Folding</span></div>
-                                <div class="flex justify-between"><span>Mag:</span><span class="text-white">50 Rnd</span></div>
+                        </details>
+
+                        <details class="border border-white/10 bg-white/5 mb-3 hover:border-neon transition-colors group cursor-pointer">
+                            <summary class="flex justify-between items-center p-3">
+                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">TANTO .22 <span class="font-mono text-[8px] text-gray-500 ml-1">SMG</span></h4>
+                                <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">HYBRID</span>
+                            </summary>
+                            <div class="p-3 pt-0">
+                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Hard-hitting SMG that doubles as sniper support. Excellent TTK.</p>
+                                <div class="font-mono text-[8px] text-gray-300 uppercase space-y-1">
+                                    <div class="flex justify-between"><span>Muzzle:</span><span class="text-white font-bold">Sound Suppressor</span></div>
+                                    <div class="flex justify-between"><span>Barrel:</span><span class="text-white font-bold">V-D-V Reinforced</span></div>
+                                    <div class="flex justify-between"><span>Under:</span><span class="text-white font-bold">Spetsnaz Grip</span></div>
+                                    <div class="flex justify-between"><span>Stock:</span><span class="text-white font-bold">KGB Skeletal</span></div>
+                                    <div class="flex justify-between"><span>Mag:</span><span class="text-white font-bold">45 Rnd</span></div>
+                                </div>
                             </div>
-                        </div>
+                        </details>
+
+                        <details class="border border-white/10 bg-white/5 mb-3 hover:border-neon transition-colors group cursor-pointer">
+                            <summary class="flex justify-between items-center p-3">
+                                <h4 class="font-black text-sm uppercase tracking-widest text-white group-hover:text-neon transition-colors">AMES 85 <span class="font-mono text-[8px] text-gray-500 ml-1">AR</span></h4>
+                                <span class="font-mono text-[8px] bg-neon/20 text-neon px-1">L-RANGE</span>
+                            </summary>
+                            <div class="p-3 pt-0">
+                                <p class="font-mono text-[8px] text-gray-400 uppercase italic mb-3 text-neon">Desc: Supreme accuracy. Best utilized holding power positions and roof tops.</p>
+                                <div class="font-mono text-[8px] text-gray-300 uppercase space-y-1">
+                                    <div class="flex justify-between"><span>Muzzle:</span><span class="text-white font-bold">Agency Suppressor</span></div>
+                                    <div class="flex justify-between"><span>Barrel:</span><span class="text-white font-bold">Ranger</span></div>
+                                    <div class="flex justify-between"><span>Optic:</span><span class="text-white font-bold">Axial Arms 3x</span></div>
+                                    <div class="flex justify-between"><span>Under:</span><span class="text-white font-bold">Field Agent Grip</span></div>
+                                    <div class="flex justify-between"><span>Mag:</span><span class="text-white font-bold">STANAG 50 Rnd</span></div>
+                                </div>
+                            </div>
+                        </details>
+
                     </div>
                 </div>
 
@@ -172,7 +243,7 @@
                         <i class="fas fa-lock text-white/20 text-2xl mb-2"></i>
                         <div class="font-black uppercase tracking-widest text-sm mb-1">Tournament Ops</div>
                         <div class="font-mono text-[8px] text-gray-500 uppercase tracking-widest">Awaiting Command Clearance...</div>
-                        <button class="mt-3 px-4 py-1 border border-neon/50 text-[8px] font-mono text-neon uppercase hover:bg-neon hover:text-white transition-all">Request Entry</button>
+                        <button class="mt-3 px-4 py-1 border border-neon/50 text-[8px] font-mono text-neon uppercase hover:bg-neon hover:text-white transition-all cursor-pointer">Request Entry</button>
                     </div>
                 </div>
             </div>
@@ -195,16 +266,16 @@
         document.addEventListener('mousedown', () => cursor.style.transform = 'translate(-50%, -50%) scale(0.8)');
         document.addEventListener('mouseup', () => cursor.style.transform = 'translate(-50%, -50%) scale(1)');
 
-        // BOOT SEQUENCE & LOGS
+        // BOOT SEQUENCE & LOGS (UPDATED)
         window.addEventListener('load', () => {
             const progress = document.getElementById('boot-progress');
             const log = document.getElementById('boot-log');
             const logs = [
                 "Bypassing Security Protocols...",
-                "Allocating Maximum Data Center Compute...",
-                "Establishing Roberts Ent. Master Node...",
+                "Loading BO7 Verified Meta Database...",
+                "Deploying Boss Babes Command UI...",
                 "Mounting Roster Assets...",
-                "LexOS Active. Welcome Commander."
+                "Command Interface Active. Welcome."
             ];
             
             progress.style.width = '100%';
